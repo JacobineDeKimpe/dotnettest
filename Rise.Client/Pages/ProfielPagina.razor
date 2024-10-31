@@ -1,0 +1,156 @@
+﻿@page "/profiel"
+@inject Rise.Shared.Users.IUserService UserService
+@using Rise.Client.Components
+@using Rise.Shared.Models
+@using Rise.Shared.Users
+
+<div class="content-wrapper">
+    @if (gebruiker == null)
+    {
+        <p>Loading...</p> 
+    }
+    else
+    {
+        
+        <HeaderProfiel Gebruiker="@gebruiker" />
+
+        <div class="profiel-container">
+            <GebruikerInfo Gebruiker="@gebruiker" />
+            <GebruikerProductInfo Producten="@gebruikerProfiel.Producten" />
+        </div>
+    }
+</div>
+
+@code {
+    private UserDto gebruiker;
+    private GebruikerProfielData gebruikerProfiel = new GebruikerProfielData();
+    private int userId = 1; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate loading user profile data
+        gebruiker = await UserService.GetUserById(userId);
+
+        // Mocked products (remove this if you fetch products from an API)
+        gebruikerProfiel.Producten = new List<Product>
+        {
+            new Product { Id = 1, Naam = "Compressen", AantalInStock = 5 },
+            new Product { Id = 2, Naam = "Injectie Naalden", AantalInStock = 3 },
+            new Product { Id = 3, Naam = "Spuit", AantalInStock = 8 },
+            new Product { Id = 4, Naam = "Zelfklevend Verband", AantalInStock = 10 }
+        };
+    }
+}
+
+
+
+
+<style>
+    .header {
+        display: flex;
+        justify-content: space-between; /* Zorgt ervoor dat "Welkom, Bob" links staat en het profiel rechts */
+        align-items: center; /* Zorgt ervoor dat alles op dezelfde lijn is */
+        padding: 10px 0;
+    }
+
+    .user-profile {
+        text-align: center; /* Zorgt dat de afbeelding en rol gecentreerd worden */
+    }
+
+    .user-logo {
+        text-align: center; /* Zorgt dat de afbeelding en rol gecentreerd worden */
+    }
+
+    .user-logo img {
+        max-width: 50px; /* Breedte van de afbeelding, pas deze aan zoals gewenst */
+        height: auto; /* Hoogte van de afbeelding */
+        border-radius: 50%; /* Zorgt voor een cirkelvormige afbeelding */
+    }
+
+    .user-role {
+        margin-top: 5px;
+        font-size: 0.9em;
+        color: gray; /* Lichtere kleur voor de rolomschrijving */
+    }
+
+    .profiel-container {
+        display: flex;
+        flex-direction: row; /* Zorgt dat de divs horizontaal staan */
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .profiel-info, .profiel-producten {
+        width: 48%;
+        /*padding: 15px;*/
+        border: 2px solid black;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .profiel-info h2, .profiel-producten h2 {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 0; /* Verwijdert de standaard margin */
+        box-sizing: border-box; /* Zorgt ervoor dat padding correct wordt berekend */
+    } 
+
+    .profiel-content {
+        padding: 15px; /* Geeft de inhoud padding binnen de div */
+    }
+
+
+    .profiel-producten ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .product-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid lightgray; /* Voegt de lichte grijze lijn toe tussen elk product */
+    }
+
+    .product-item:last-child {
+        border-bottom: none; /* Verwijdert de lijn onder het laatste product */
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column; /* Zorgt ervoor dat de naam en de stock-info onder elkaar staan */
+    }
+
+    .product-naam {
+        font-size: 1.2em; /* Zorgt ervoor dat de naam groter is */
+        font-weight: bold; /* Maakt de naam vetgedrukt */
+    }
+
+    
+    .product-stock {
+        font-size: 0.9em;
+        color: gray; /* Lichtere kleur voor de stock-informatie */
+    }
+
+    .product-bestel {
+        display: flex;
+        justify-content: flex-end; /* Zorgt ervoor dat de knop naar rechts wordt uitgelijnd */
+    }
+
+    .profiel-producten li {
+        margin-bottom: 10px;
+    }
+
+    button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>

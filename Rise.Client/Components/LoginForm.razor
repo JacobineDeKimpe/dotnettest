@@ -1,0 +1,105 @@
+﻿@code {
+    [Parameter]
+    public EventCallback OnLoginSuccess { get; set; }
+
+    private string username;
+    private string password;
+    private bool loginFailed;
+
+    private async Task HandleLogin()
+    {
+        // Simuleer authenticatie
+        if (username == "admin" && password == "password")
+        {
+            // Als de login succesvol is, roep de callback aan
+            await OnLoginSuccess.InvokeAsync();
+        }
+        else
+        {
+            // Toon foutmelding als de login mislukt
+            loginFailed = true;
+        }
+    }
+}
+
+<div class="login-wrapper">
+    <h1 class="centered">Welkom!</h1>
+
+    <EditForm Model="@this" OnValidSubmit="HandleLogin">
+        <div class="form-group">
+            <label for="username">Email</label>
+            <InputText id="username" @bind-Value="username" placeholder="Voer je email in" />
+        </div>
+        <div class="form-group">
+            <label for="password">Wachtwoord</label>
+            <InputText id="password" @bind-Value="password" type="password" placeholder="Voer je wachtwoord in" />
+        </div>
+
+        @if (loginFailed)
+        {
+            <p class="error">Incorrect username or password. Please try again.</p>
+        }
+
+        <button type="submit">Inloggen</button>
+    </EditForm>
+</div>
+
+<style>
+    .login-wrapper {
+        background-color: rgba(255, 255, 255, 0.9); /* Lichtdoorzichtig voor contrast */
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 350px;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+
+    .centered {
+        text-align: center;
+        font-size: 2em;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .form-group {
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+    .login-wrapper label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .login-wrapper input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .login-wrapper button {
+        width: 100%;
+        padding: 10px;
+        background-color: black;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+        .login-wrapper button:hover {
+            background-color: #333;
+        }
+
+    .error {
+        color: red;
+        margin-top: 10px;
+    }
+
+
+</style>

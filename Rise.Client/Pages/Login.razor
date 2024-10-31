@@ -1,0 +1,47 @@
+﻿@page "/login"
+@using Rise.Client.Components
+
+@inject NavigationManager NavigationManager
+
+<div class="login-page">
+    <LoginForm OnLoginSuccess="HandleLogin" />
+</div>
+
+@code {
+    private void HandleLogin()
+    {
+        // Redirect naar de homepagina na succesvolle login
+        NavigationManager.NavigateTo("/");
+    }
+}
+
+
+
+<style>
+    /* Algemeen stijlen voor de login-pagina blijven hier, inclusief de achtergrondafbeelding */
+    .login-page {
+        position: relative;
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .login-page::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('/images/WelkomScherm.jpg');
+        background-position: center;
+        background-size: cover;
+        filter: saturate(0.2);
+        z-index: -1;
+    }
+</style>

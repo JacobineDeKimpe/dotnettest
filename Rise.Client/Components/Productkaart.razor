@@ -1,0 +1,61 @@
+﻿@code {
+    [Parameter] public required string ImageUrl { get; set; }
+    [Parameter] public required string Naam { get; set; }
+    [Parameter] public required string Lokaal { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+    private Task HandleClick() => OnClick.InvokeAsync();
+}
+
+<div class="product-card" @onclick="HandleClick">
+    <div class="kalender-section">
+        <button id="kalender-button">
+            Nieuw
+        </button>
+        <NavLink href="/reservatie">
+            <img class="kalender-img" src="images/Kalendericoon.png" alt="Kalender" />
+        </NavLink>
+    </div>
+
+    <div>
+        <img class="product-image" src="@ImageUrl" alt="@Naam" />
+    </div>
+
+    <div class="product-details">
+        <h2>@Naam</h2>
+        <div>
+
+            <label>Lokaal: </label>
+            <span>@Lokaal</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .kalender-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    #kalender-button {
+        background-color: red;
+        color: white;
+        margin-right: auto;
+    }
+
+    .kalender-img {
+        width: 50px;
+    }
+
+    .product-card {
+        border-radius: 5px;
+        background-color: white;
+        cursor: pointer; 
+    }
+
+    #kalender-button {
+        background-color: red;
+        color: white;
+    }
+</style>

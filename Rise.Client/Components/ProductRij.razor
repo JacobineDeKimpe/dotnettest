@@ -1,0 +1,14 @@
+﻿@using Rise.Shared.Products
+@code {
+    [Parameter] public required ProductDto product { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+    private Task HandleClick() => OnClick.InvokeAsync();
+}
+
+<tr @onclick="HandleClick" style="cursor: pointer;">
+    <td>@product.Name</td>
+    <td>@product.Quantity</td>
+    <td>@product.Location</td>
+    <td>@(product.Reusable ? "Uitlenen" : "Uitscannen")</td>
+    <td>@product.Barcode</td>
+</tr>

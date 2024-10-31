@@ -1,0 +1,49 @@
+﻿<div class="top-row navbar navbar-expand-lg">
+    <div class="container-fluid justify-content-between">
+        <img id="hogentimg" src="/images/Hogent.png" alt="HOGENT Logo" />
+        <div class="navbar-nav @(IsLoginPage() ? "hidden" : "")">
+            <!-- Verberg knoppen als het de loginpagina is -->
+            <NavLink class="nav-link" href="/">Home</NavLink>
+            <NavLink class="nav-link" href="/">Producten</NavLink>
+            <NavLink class="nav-link" href="/profiel">Profiel</NavLink>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    private bool IsLoginPage() => NavigationManager.Uri.EndsWith("/login");
+}
+
+<style>
+    .navbar {
+        background-color: white; 
+        padding: 10px 20px; 
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-nav .nav-link {
+        margin-left: 20px; 
+        color: black; 
+        font-weight: 500; 
+        transition: color 0.3s ease; 
+        border-radius: 5px;
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: black; 
+            background-color: white;
+        }
+
+        .navbar-nav .nav-link.active {
+            font-weight: bold; 
+            color: #0056b3; 
+            border-bottom: 2px solid #0056b3; 
+        }
+
+    .hidden {
+        display: none; /* Dit verbergt de knoppen */
+    }
+
+</style>

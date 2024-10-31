@@ -1,0 +1,39 @@
+﻿@using Rise.Shared.Users
+@namespace Rise.Client.Components
+
+@code {
+    [Parameter] public required UserDto Gebruiker { get; set; }
+}
+
+<div class="header">
+    <h1>Welkom, @Gebruiker.Voornaam!</h1>
+    <div class="user-logo">
+        <img src="./images/userprofile-icon.png" alt="Profiel afbeelding" />
+        <p>@Gebruiker.Rol</p>
+    </div>
+</div>
+
+<style>
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+    }
+
+    .user-logo {
+        text-align: center;
+    }
+
+    .user-logo img {
+        max-width: 50px;
+        height: auto;
+        border-radius: 50%;
+    }
+
+    .user-logo p {
+        margin-top: 5px;
+        font-size: 0.9em;
+        color: gray;
+    }
+</style>

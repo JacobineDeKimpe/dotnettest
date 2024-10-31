@@ -1,0 +1,91 @@
+﻿
+<div class="filter-box">
+
+    <div class="filter-item">
+        <label>Lokaal: </label>
+        <input type="text" placeholder="Bv. B1.305" />
+    </div>
+
+    <div class="checkbox-group">
+        <label for="OOS">Out of stock: </label>
+        <input type="checkbox" id="OOS" value="OOS" />
+    </div>
+
+    <div class="filter-item">
+        <label>Barcode: </label>
+        <input type="text" placeholder="Bv. 123 456 789" />
+    </div>
+
+    <div class="filter-item">
+        <button type="button">Filter</button>
+    </div>
+</div>
+
+<style>
+    .filter-box {
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 50px;
+    }
+
+    .filter-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .filter-item label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    input[type="text"], select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    button {
+        padding: 10px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #adb5bd;
+        }
+
+    .top-row.ps-3.navbar {
+        background-color: white;
+    }
+
+        .top-row.ps-3.navbar .navbar-brand {
+            color: black;
+        }
+
+            .top-row.ps-3.navbar .navbar-brand:hover {
+                color: #ccc;
+            }
+
+</style>
+
+

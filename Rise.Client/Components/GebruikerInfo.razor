@@ -1,0 +1,51 @@
+﻿@using Rise.Shared.Users
+@namespace Rise.Client.Components
+
+
+@code {
+    [Parameter] public required UserDto Gebruiker { get; set; }
+}
+
+ <div class="profiel-info">
+        <h2>Persoonlijke info</h2>
+        <div class="profiel-content">
+            <p>Naam: @Gebruiker.Naam</p>
+            <p>Email: @Gebruiker.Email</p>
+            <p>TelefoonNr: @Gebruiker.TelNr</p>
+            <button>Wijzig</button>
+        </div>
+ </div>
+
+<style>
+    .profiel-info {
+        width: 48%;
+        border: 2px solid black;
+        border-radius: 8px;
+        /* padding: 15px; */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 0;
+    }
+
+    .profiel-info h2 {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .profiel-content {
+        padding: 15px;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>

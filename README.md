@@ -1,35 +1,40 @@
-# SportStore
+# Rise - [GENT4]
 
-This project is a very simple e-commerce website for sports products.
+## Team Members
+- [Michiel_Murphy] - [michiel.murphy@student.hogent.be] - [MichielMurphy]
 
-## Requirements
+## Technologies & Packages Used
+- [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) - Frontend
+- [ASP.NET 8](https://dotnet.microsoft.com/en-us/apps/aspnet) - Backend
+- [Entity Framework 8](https://learn.microsoft.com/en-us/ef/) - Database Access
+- [EntityFrameworkCore Triggered](https://github.com/koenbeuk/EntityFrameworkCore.Triggered) - Database Triggers
+- [User Secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets) - Securely store secrets in DEV.
+- [GuardClauses](https://github.com/ardalis/GuardClauses) - Validation Helper
+- [bUnit](https://bunit.dev) - Blazor Component Testing
+- [xUnit](https://xunit.net) - (Unit) Testing
+- [nSubstitute](https://nsubstitute.github.io) - Mocking for testing
+- [Shouldly](https://docs.shouldly.org) - Helper for testing
 
-- [.NET 6.0 SDK](https://dotnet.microsoft.com/en-us/download)
-- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-
-## How to run in development
-
-> These steps assume that you have a SQL Server instance running on your machine. If not, you can use the [SQL Server Docker image](https://hub.docker.com/_/microsoft-mssql-server) to run one. Make sure to set the correct connection string of the SQL Server instance in `src/Server/appsettings.Development.json`.
-
+## Installation Instructions
 1. Clone the repository
-2. Restore the packages: `dotnet restore src/Server/Server.csproj`
-3. Start the server: `dotnet run watch --project src/Server/Server.csproj`
+2. Open the `Rise.sln` file in Visual Studio or Visual Studio Code
+3. Run the project using the `Rise.Server` project as the startup project
+4. The project should open in your default browser on port 5001.
+5. Initially the database will not exist, so you will need to run the migrations to create the database.
 
-## How to run in production
+## Creation of the database
+To create the database, run the following command in the main folder `Rise`
+```
+dotnet ef database update --startup-project Rise.Server --project Rise.Persistence
+```
+> Make sure your connection string is correct in the `Rise/Server/appsettings.json` file.
 
-1. Clone the repository
-2. Restore the packages: `dotnet restore src/Server/Server.csproj`
-3. Build the server: `dotnet build src/Server/Server.csproj`
-4. Publish the server: `dotnet publish src/Server/Server.csproj -c Release -o publish`
-5. Make sure the following environment variables are set:
-   - `DOTNET_ENVIRONMENT`: environment name, e.g. `Production`
-   - `DOTNET_ConnectionStrings__SqlDatabase`: connection string to the SQL Server database
-6. Start the server: `dotnet publish/Server.dll`
-
-## How to test
-
-> No database is required to run the unit tests.
-
-1. Clone the repository
-2. Restore the packages: `dotnet restore src/Server/Server.csproj` and `dotnet restore tests/Domain.Tests/Domain.Tests.csproj`
-3. Run the unit tests for the domain: `dotnet test tests/Domain.Tests/Domain.Tests.csproj`
+## Migrations
+Adapting the database schema can be done using migrations. To create a new migration, run the following command:
+```
+dotnet ef migrations add [MIGRATION_NAME] --startup-project Rise.Server --project Rise.Persistence
+```
+And then update the database using the following command:
+```
+dotnet ef database update --startup-project Rise.Server --project Rise.Persistence
+```

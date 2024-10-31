@@ -1,0 +1,170 @@
+﻿@namespace Rise.Client.Component
+@using Rise.Shared.Products
+
+@code {
+    [Parameter] public required ProductDto Product { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private async Task HandleClose()
+    {
+        await OnClose.InvokeAsync();
+    }
+}
+
+<div class="overlay">
+    <div class="vergroot-product">
+        <button class="close-button" @onclick="HandleClose">X</button>
+        <img class="product-image-large" src="/images/Stethoscoop.png" alt="@Product.Name" />
+        <h2 class="product-name">@Product.Name</h2>
+        <hr />
+        <div class="stock-info">
+            <div class="left-info">
+                <div class="stock-status">
+                    <label>In stock:</label>
+                    <input type="checkbox" disabled="true" checked="@Product.Quantity > 0" class="stock-checkbox" />
+                </div>
+                <div class="stock-details">
+                    <div>
+                        <label>Aantal in stock:</label>
+                        <span>@Product.Quantity</span>
+                    </div>
+                    <div>
+                        <label>Lokaal:</label>
+                        <span>@Product.Location</span>
+                    </div>
+                </div>
+                <div class="quantity-container">
+                    <input type="number" @bind="Product.Quantity" min="0" class="quantity-input" />
+                </div>
+            </div>
+            <div class="barcode-info">
+                <img src="/images/barcode.png" alt="Barcode" class="barcode-image" />
+                <span>@Product.Barcode</span>
+                <button>@(Product.Reusable?"Uitlenen":"Uitchecken")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .vergroot-product {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 60%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden; 
+    }
+
+    .close-button {
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        padding: 10px;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .product-image-large {
+        width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+        margin-bottom: 10px;
+    }
+
+    .product-name {
+        margin: 10px 0;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    hr {
+        margin: 10px 0;
+        border: 1px solid black;
+    }
+
+    .stock-info {
+        display: flex;
+        justify-content: space-between; 
+        align-items: flex-start; 
+        margin-top: 10px;
+        width: 100%; 
+    }
+
+    .left-info {
+        display: flex;
+        flex-direction: column; 
+        align-items: flex-start; 
+    }
+
+    .stock-status {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px; 
+    }
+
+        .stock-status label {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
+    .stock-checkbox {
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .stock-details {
+        display: flex;
+        flex-direction: column;
+        margin-left: 0; 
+        width: 100%; 
+    }
+
+        .stock-details div {
+            font-size: 16px;
+            text-align: left;
+            margin-top: 2px; 
+        }
+
+    .barcode-info {
+        display: flex;
+        flex-direction: column; 
+        align-items: flex-end; 
+        margin-left: 20px; 
+    }
+
+    .barcode-image {
+        width: 100px;
+        height: auto;
+        margin-bottom: 5px; 
+    }
+
+    .barcode-info span {
+        font-size: 16px;
+        text-align: right;
+    }
+</style>

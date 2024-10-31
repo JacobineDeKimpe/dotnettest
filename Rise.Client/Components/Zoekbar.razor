@@ -1,0 +1,25 @@
+﻿
+
+<div>
+    <input id="zoekbar" @bind-value="filter" type="text" name="Zoek" />
+    <button @onclick="zoekHandle">Zoek</button>
+</div>
+
+<style>
+    input[name="Zoek"] {
+        width: 350px;
+    }
+
+    #zoekbar {
+        margin-right: 20px;
+        margin-left:40px;
+    }
+</style>
+
+@code {
+    public required string filter { get; set; }
+    private void zoekHandle()
+    {
+        
+    }
+}
