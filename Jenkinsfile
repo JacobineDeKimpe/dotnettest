@@ -8,10 +8,10 @@ stage('Checkout') {
         }    
 stage('Build') {
     steps {
-        sh echo "restore"
-        dotnet restore
-        sh echo "build"
-        dotnet build
+         echo "restore"
+        sh 'dotnet restore'
+         echo "build"
+        sh 'dotnet build'
         
         }
 
