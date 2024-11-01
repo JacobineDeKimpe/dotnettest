@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 
 pipeline{
-agent { label 'built-in' }
 stages {
 stage('Checkout') {
     steps {
