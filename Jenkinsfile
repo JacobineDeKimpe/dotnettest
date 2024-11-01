@@ -9,7 +9,9 @@ stage('Checkout') {
 stage('Build') {
     steps {
         script {
-        sh 'whoami'
+        sh 'pwd'
+        sh 'cat /etc/os-release '
+        sh 'uname -a'
         echo "install dotnet"
         sh 'dnf install dotnet-sdk-8.0 -y'
          echo "restore"
