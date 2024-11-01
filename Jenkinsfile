@@ -10,7 +10,7 @@ stage('Build') {
     steps {
         script {
         echo "install dotnet"
-        sh 'sudo dnf install dotnet-sdk-8.0 -y'
+        sh 'dnf install dotnet-sdk-8.0 -y'
          echo "restore"
         sh 'dotnet restore'
          echo "build"
