@@ -8,6 +8,7 @@ stage('Checkout') {
         }    
 stage('Build') {
     steps {
+        script {
         echo "install dotnet"
         sh 'sudo dnf install dotnet-sdk-8.0 -y'
          echo "restore"
@@ -15,8 +16,8 @@ stage('Build') {
          echo "build"
         sh 'dotnet build'
         
-        }
-
+            }
+    }
     }
 }
 }
