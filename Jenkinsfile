@@ -1,4 +1,5 @@
 pipeline{
+    agent any
 stages {
 stage('Checkout') {
     steps {
@@ -6,14 +7,14 @@ stage('Checkout') {
            }
         }    
 stage('Build') {
-script {
-sh echo "restore"
-dotnet restore
-sh echo "build"
-dotnet build
-    
-}
+    steps {
+        sh echo "restore"
+        dotnet restore
+        sh echo "build"
+        dotnet build
+        
+        }
 
-}
+    }
 }
 }
