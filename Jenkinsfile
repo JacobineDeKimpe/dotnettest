@@ -9,7 +9,8 @@ stage('Checkout') {
 stage('Build') {
     steps {
         script {
-        sh 'apt-get install dotnet-sdk-8.0 -y'
+        sh 'sudo apt-get update && \
+  sudo apt-get install -y dotnet-sdk-8.0'
          echo "restore"
         sh 'dotnet restore'
          echo "build"
