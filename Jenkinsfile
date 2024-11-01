@@ -11,6 +11,7 @@ stage('Checkout') {
 stage('Build') {
     steps {
         script {
+        sh 'ip a'
         sh 'apt-get update '
         sh ' apt-get install -y wget apt-transport-https'
         sh 'wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb'
