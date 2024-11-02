@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 
 pipeline{
-agent { label 'jenkins' }
 stages {
 stage('Checkout') {
     steps {
