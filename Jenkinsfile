@@ -24,8 +24,6 @@ stage("test") {
             steps {
                 echo "test the app"
                 script {
-                    sh 'dotnet add package Microsoft.Playwright.NUnit' 
-                    powershell 'pwsh bin/Debug/net8.0/playwright.ps1 install'    
                     sh 'dotnet test'
                 }
             }
