@@ -16,7 +16,7 @@ stage("build") {
                     sh 'dotnet restore'
                     sh 'dotnet add package Microsoft.Playwright.NUnit'    
                     sh 'dotnet build'
-                    pwsh bin/Debug/net8.0/playwright.ps1 install    
+                    powershell 'pwsh bin/Debug/net8.0/playwright.ps1 install'
                 }
             }
         }
