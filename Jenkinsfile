@@ -12,8 +12,11 @@ stage("build") {
             steps {
                 echo "build the app"
                 script {
+                
                     sh 'dotnet restore'
+                    sh 'dotnet add package Microsoft.Playwright.NUnit'    
                     sh 'dotnet build'
+                    pwsh bin/Debug/net8.0/playwright.ps1 install    
                 }
             }
         }
@@ -22,6 +25,7 @@ stage("test") {
             steps {
                 echo "test the app"
                 script {
+                    
                     sh 'dotnet test'
                 }
             }
