@@ -7,4 +7,14 @@ stages {
             }
         }
 } 
+stage("build") {
+            
+            steps {
+                echo "build the app"
+                script {
+                    sh 'dotnet restore'
+                    sh 'dotnet build'
+                }
+            }
+        }        
 } 
