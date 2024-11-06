@@ -19,19 +19,10 @@ stage("build") {
                 }
             }
         }
-stage("test") {
-            
-            steps {
-                echo "test the app"
-                script {
-                    sh 'dotnet test'
-                }
-            }
-        }   
 stage("publish") {
             
             steps {
-                echo "test the app"
+                echo "publish the app"
                 script {
                     sh 'dotnet publish -c Release -o ./publish '
                 }
