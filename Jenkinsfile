@@ -3,7 +3,7 @@ agent { label 'webserver' }
 stages {
         stage('Checkout') {
             steps {
-               git branch: 'main', credentialsId: 'jenkins', url: 'git@github.com:JacobineDeKimpe/dotnettest.git'
+               git branch: 'main', credentialsId: 'RISE', url: 'git@github.com:JacobineDeKimpe/dotnettest.git'
             }
         }
 
