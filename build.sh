@@ -39,6 +39,7 @@ cp -r Rise.Shared/* tempdir/Rise.Shared
 cp Rise.sln tempdir
 
 cat > tempdir/Dockerfile << _EOF_
+FROM debian:bookworm-slim
 COPY ./Rise.client /home/app/Rise.Client/
 COPY ./Rise.Client.Tests /home/app/Rise.Client.Tests/
 COPY ./Rise.Domain /home/app/Rise.Domain/
