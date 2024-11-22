@@ -55,6 +55,6 @@ cmd dotnet build /home/app/
 _EOF_
 
 cd tempdir || exit
-docker build -t Rise-Dotnet .
-docker run -t -p 5001:5001 --name Dotnet-running Rise-Dotnet
+docker build -t rise-dotnet .
+docker run -t -p 5001:5001 --name dotnet-running rise-dotnet
 docker ps -a
