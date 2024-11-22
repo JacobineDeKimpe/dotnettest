@@ -29,7 +29,7 @@ cp -r Rise.PlaywrightTests/* tempdir/Rise.PlaywrightTests
 echo "Copying Ris.Server files"
 cp -r Rise.Server/* tempdir/Rise.Server
 echo "Copying Ris.Server.Tests files"
-cp -r Rise.Server.Tests/* tempdir/Rise.Server.Tests
+#cp -r Rise.Server.Tests/* tempdir/Rise.Server.Tests
 echo "Copying Ris.Services files"
 cp -r Rise.Services/* tempdir/Rise.Services
 echo "Copying Ris.Shared files"
