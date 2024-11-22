@@ -13,45 +13,45 @@ mkdir -p tempdir/Rise.Server.Tests
 mkdir -p tempdir/Rise.Services
 mkdir -p tempdir/Rise.Shared
 
-#copy the content of the folder
-echo "Copying Ris.Client files"
+#COPY the content of the folder
+echo "COPYing Ris.Client files"
 cp -r Rise.Client/* tempdir/Rise.Client
-echo "Copying Ris.Client.Tests files"
+echo "COPYing Ris.Client.Tests files"
 cp -r Rise.Client.Tests/* tempdir/Rise.Client.Tests
-echo "Copying Ris.Domain files"
+echo "COPYing Ris.Domain files"
 cp -r Rise.Domain/* tempdir/Rise.Domain
-echo "Copying Ris.Domain.Tests files"
+echo "COPYing Ris.Domain.Tests files"
 cp -r Rise.Domain.Tests/* tempdir/Rise.Domain.Tests
-echo "Copying Ris.Persistence files"
+echo "COPYing Ris.Persistence files"
 cp -r Rise.Persistence/* tempdir/Rise.Persistence
-echo "Copying Ris.PlaywrightTests files"
+echo "COPYing Ris.PlaywrightTests files"
 cp -r Rise.PlaywrightTests/* tempdir/Rise.PlaywrightTests
-echo "Copying Ris.Server files"
+echo "COPYing Ris.Server files"
 cp -r Rise.Server/* tempdir/Rise.Server
-echo "Copying Ris.Server.Tests files"
+echo "COPYing Ris.Server.Tests files"
 #cp -r Rise.Server.Tests/* tempdir/Rise.Server.Tests
-echo "Copying Ris.Services files"
+echo "COPYing Ris.Services files"
 cp -r Rise.Services/* tempdir/Rise.Services
-echo "Copying Ris.Shared files"
+echo "COPYing Ris.Shared files"
 cp -r Rise.Shared/* tempdir/Rise.Shared
 
-#copy the sln file to tempdir
+#COPY the sln file to tempdir
 cp Rise.sln tempdir
 
 cat > tempdir/Dockerfile << _EOF_
-copy ./Rise.client /home/app/Rise.Client/
-copy ./Rise.Client.Tests /home/app/Rise.Client.Tests/
-copy ./Rise.Domain /home/app/Rise.Domain/
-copy ./Rise.Domain.Tests /home/app/Rise.Domain.Tests/
-copy ./Rise.Persistence /home/app/Rise.Persistence/
-copy ./Rise.PlaywrightTests /home/app/Rise.PlaywrightTests/
-copy ./Rise.Server /home/app/Rise.Server/
-copy ./Rise.Server.Tests /home/app/Rise.Server.Tests/
-copy ./Rise.Services /home/app/Rise.Services/
-copy ./Rise.Shared /home/app/Rise.Shared/
-copy ./Rise.sln /home/app/Rise.sln
-expose 5001
-cmd dotnet build /home/app/
+COPY ./Rise.client /home/app/Rise.Client/
+COPY ./Rise.Client.Tests /home/app/Rise.Client.Tests/
+COPY ./Rise.Domain /home/app/Rise.Domain/
+COPY ./Rise.Domain.Tests /home/app/Rise.Domain.Tests/
+COPY ./Rise.Persistence /home/app/Rise.Persistence/
+COPY ./Rise.PlaywrightTests /home/app/Rise.PlaywrightTests/
+COPY ./Rise.Server /home/app/Rise.Server/
+COPY ./Rise.Server.Tests /home/app/Rise.Server.Tests/
+COPY ./Rise.Services /home/app/Rise.Services/
+COPY ./Rise.Shared /home/app/Rise.Shared/
+COPY ./Rise.sln /home/app/Rise.sln
+EXPOSE 5001
+CMD dotnet build /home/app/
 _EOF_
 
 cd tempdir || exit
