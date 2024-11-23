@@ -51,6 +51,9 @@ COPY . .
 
 # Restore the NuGet packages
 RUN dotnet restore
+RUN dotnet add package Microsoft.Playwright.NUnit
+RUN dotnet build
+RUN pwsh bin/Debug/net8.0/playwright.ps1 install
 RUN dotnet publish -c Release -o out
 
 # Use the official .NET 8 runtime image to create a runtime image
