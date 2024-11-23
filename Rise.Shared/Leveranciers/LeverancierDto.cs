@@ -1,4 +1,6 @@
-﻿﻿namespace Rise.Shared.Leveranciers
+﻿using System.Text.Json.Serialization;
+
+namespace Rise.Shared.Leveranciers
 {
     public class LeverancierDto
     {

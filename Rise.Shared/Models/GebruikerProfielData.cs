@@ -6,25 +6,19 @@ using System.Threading.Tasks;
 
 namespace Rise.Shared.Models
 {
-    public class GebruikerProfielData
-    {
-        public Gebruiker Gebruiker { get; set; }
-        public List<Product> Producten { get; set; }
-    }
-
     public class Gebruiker
     {
-        public int Id { get; set; }
-        public string Naam { get; set; }
-        public string Email { get; set; }
-        public string TelNr { get; set; }
+        public required int Id { get; set; }
+        public required string Naam { get; set; }
+        public required string Email { get; set; }
+        public required string TelNr { get; set; }
 
     }
 
     public class Product
     {
-        public int Id { get; set; }
-        public string Naam { get; set; }
-        public int AantalInStock { get; set; }
+        public required int Id { get; set; }
+        public required string Naam { get; set; }
+        public required int AantalInStock { get; set; }
     }
 }

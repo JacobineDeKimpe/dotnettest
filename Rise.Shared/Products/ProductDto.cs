@@ -1,6 +1,6 @@
-﻿﻿namespace Rise.Shared.Products;
+namespace Rise.Shared.Products;
 
-public class ProductDto
+ public class ProductDto
 {
     public required int Id { get; set; }
     public required string Name { get; set; }
@@ -9,4 +9,7 @@ public class ProductDto
     public required bool Reusable { get; set; }
     public required int Quantity { get; set; }
     public required string Barcode { get; set; }
+    public required string ImgUrl { get; set; }
+    public required int MinStock { get; set; }
+    public required string Keywords { get; set; }
 }

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.Leveranciers;
-
-using Rise.Shared.Products;
 
 namespace Rise.Server.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class LeverancierController : ControllerBase
     {
         private readonly ILeverancierService leverancierService;

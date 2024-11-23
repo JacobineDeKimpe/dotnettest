@@ -1,4 +1,4 @@
-﻿﻿using Rise.Domain.Leveranciers;
+using Rise.Domain.Leveranciers;
 namespace Rise.Domain.Products;
 public class Product : Entity
 {
@@ -8,7 +8,10 @@ public class Product : Entity
     private bool reusable = default!;
     private int quantity = default!;
     private string barcode = default!;
+    private int minStock = default!;
+    private string keywords = default!;
     private Leverancier leverancier = default!;
+    private string imgUrl = default!;
 
     public required string Name
     {
@@ -46,6 +49,18 @@ public class Product : Entity
         set => barcode = Guard.Against.NullOrWhiteSpace(value);
     }
 
+    public required int MinStock
+    {
+        get => minStock;
+        set => minStock = Guard.Against.Negative(value);
+    }
+
+    public required string Keywords
+    {
+        get => keywords;
+        set => keywords = Guard.Against.NullOrWhiteSpace(value);
+    }
+
     public required Leverancier Leverancier
     {
         get => leverancier;
@@ -54,5 +69,11 @@ public class Product : Entity
             leverancier = Guard.Against.Null(value);
             leverancier.AddProduct(this);
         }
+    }
+
+    public required string ImgUrl
+    {
+        get => imgUrl;
+        set => imgUrl = Guard.Against.NullOrWhiteSpace(value);
     }
 }

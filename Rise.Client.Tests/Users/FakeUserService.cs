@@ -15,12 +15,10 @@ namespace Rise.Client.Users;
         _users = Enumerable.Range(1, 10)
                               .Select(i => new UserDto
                               {
-                                  Id = i,
-                                  Voornaam = $"Voornaam {i}",
-                                  Naam = $"Naam {i}",
-                                  Email = $"user{i}@example.com",
-                                  TelNr = $"12345",
-                                  Rol = $"ADMIN"
+                                Email = "michiel_murphy@outlook.com",
+                                FirstName = "Michiel",
+                                LastName = "Murphy",
+                                IsBlocked = false
                               })
                               .ToList();
     }
@@ -29,16 +27,9 @@ namespace Rise.Client.Users;
         return Task.FromResult(_users.AsEnumerable());
     }
 
-    public Task<UserDto> GetUserById(int id)  
+    public Task<UserDto> GetUserByEmail(string email)  
     {
-        var user = _users.FirstOrDefault(u => u.Id == id);  
-        return Task.FromResult(user);
-    }
-
-    public Task<UserDto> GetUserByEmail(string email)
-    {
-        var user = _users.FirstOrDefault(u => u.Email == email);
+        var user = _users.FirstOrDefault(u => u.Email == email) ?? throw new InvalidOperationException($"User with email {email} not found");
         return Task.FromResult(user);
     }
 }
-

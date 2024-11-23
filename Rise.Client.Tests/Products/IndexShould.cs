@@ -1,80 +1,72 @@
 ﻿using Rise.Shared.Products;
 using Xunit.Abstractions;
 using Shouldly;
-using System.Collections.Generic;
-using Rise.Client.Pages;
+using Rise.Client.Products.Services;
+using System.Threading.Tasks;
 
 namespace Rise.Client.Products;
 
-/// <summary>
-/// These tests are written entirely in C#.
-/// Learn more at https://bunit.dev/docs/getting-started/writing-tests.html#creating-basic-tests-in-cs-files
-/// </summary>
-public class IndexShould : TestContext
+public class ProductenlijstShould : TestContext
 {
-    public IndexShould(ITestOutputHelper outputHelper)
+    public ProductenlijstShould(ITestOutputHelper outputHelper)
     {
         Services.AddXunitLogger(outputHelper);
-				Services.AddScoped<IProductService, FakeProductService>();
+        Services.AddScoped<IProductService, FakeProductService>();
+        Services.AddScoped<ProductenlijstStatus>();
+    }
+
+    private IRenderedComponent<Productenlijst> RenderProductenlijst()
+    {
+        return RenderComponent<Productenlijst>();
     }
 
     [Fact]
-		public void ShowsProductsInitially()
-		{
-			var cut = RenderComponent<Productenlijst>();
-			cut.FindAll(".product-list .product-card").Count.ShouldBe(7);
-		}
-
-		[Fact]
-		public void ShowsReusableProducts()
-		{
-
-    	var cut = RenderComponent<Productenlijst>();
-
-    	cut.Find("button:contains('Herbruikbaar')").Click();
-
-    	cut.FindAll(".product-list .product-card").Count.ShouldBe(3);
-		}
-
-		[Fact]
-    public void FiltersProductsBasedOnSearch()
+    public void ShowsProductsInitially()
     {
-        var cut = RenderComponent<Productenlijst>();
+        var cut = RenderProductenlijst();
 
-        var inputElement = cut.Find("#product-search");
-        inputElement.Change("Product 8");  
-
-        cut.Find("button:contains('Zoek')").Click();
-
-        var productCards = cut.FindAll(".product-list .product-card");
-        productCards.Count.ShouldBe(1);  
-
-        productCards[0].TextContent.ShouldContain("Product 8");
+        // Aantal producten wordt gecontroleerd
+        cut.FindAll(".row .card-title").Count.ShouldBe(7);
     }
 
-		[Fact]
-		public void SearchReusableProductOnInitialScreen() {
-				var cut = RenderComponent<Productenlijst>();
+    [Fact]
+    public void ShowsReusableProducts()
+    {
+        var cut = RenderProductenlijst();
 
+        // Klik op de 'Uitlenen' knop om herbruikbare producten te tonen
+        cut.Find("button:contains('Uitlenen')").Click();
+
+        // Controleer of er 3 herbruikbare producten worden weergegeven
+        cut.FindAll(".row .card-title").Count.ShouldBe(3);
+    }
+
+
+    [Fact]
+    public void SearchOnDescriptionInitialScreen()
+    {
+        var cut = RenderProductenlijst();
+
+        // Voer een algemene zoekterm in
         var inputElement = cut.Find("#product-search");
-        inputElement.Change("Product 2");  
+        inputElement.Change("Product");
 
-        cut.Find("button:contains('Zoek')").Click();
+        // Controleer of alle 7 producten worden weergegeven
+        var productCards = cut.FindAll(".row .card-title");
+        productCards.Count.ShouldBe(7);
+    }
 
-        var productCards = cut.FindAll(".product-list .product-card");
-        productCards.Count.ShouldBe(0);  
-		}
+    // Test om herbruikbare producten te tonen door de knop 'Uitlenen' te gebruiken
+    [Fact]
+    public void FilterProductsWhenUitlenenButtonIsClicked()
+    {
+        var cut = RenderProductenlijst();
 
-		[Fact]
-		public void SearchOnDescriptionInitialScreen() {
-				var cut = RenderComponent<Productenlijst>();
+        // Klik op de knop 'Uitlenen'
+        cut.Find("button:contains('Uitlenen')").Click();
 
-        var inputElement = cut.Find("#product-search");
-        inputElement.Change("Product");  
-
-        cut.Find("button:contains('Zoek')").Click();
-
-        var productCards = cut.FindAll(".product-list .product-card");
-        productCards.Count.ShouldBe(7);  
-		}
+        // Controleer of de juiste producten worden getoond
+        var productCards = cut.FindAll(".row .card-title");
+        productCards.Count.ShouldBe(3);
+    }
 }

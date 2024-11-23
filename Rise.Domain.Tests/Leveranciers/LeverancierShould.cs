@@ -88,7 +88,10 @@ public class LeverancierShould
             Reusable = false,
             Quantity = 100,
             Barcode = "123456789",
-            Leverancier = leverancier  // Dit voegt automatisch product toe aan leverancier, geen nood om leverancier.addProduct aan te roepen
+            Keywords = "mask, protection",
+            MinStock = 5,
+            Leverancier = leverancier,  // Dit voegt automatisch product toe aan leverancier, geen nood om leverancier.addProduct aan te roepen
+            ImgUrl = "test.jpg"  
         };
 
         leverancier.Products.Count.ShouldBe(1);

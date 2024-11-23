@@ -28,5 +28,8 @@ internal class ProductConfiguration : EntityConfiguration<Product>
             .IsRequired();
 
         builder.Property(x => x.Barcode).HasMaxLength(48).IsRequired();
+
+        builder.Property(x => x.Keywords)
+            .IsRequired();
     }
 }

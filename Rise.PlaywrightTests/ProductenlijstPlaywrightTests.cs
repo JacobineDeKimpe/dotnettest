@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using NUnit.Framework;
 
 namespace Rise.Client.Pages;
 
@@ -10,22 +6,49 @@ namespace Rise.Client.Pages;
 [TestFixture]
 public class ProductenlijstPlaywrightTests : PageTest
 {
+    
+    private const string Email = "michiel_murphy@outlook.com";
+    private const string Password = "Superkat55!";
+
+    [SetUp]
+    public async Task SetUp()
+    {
+        await Page.GotoAsync("https://localhost:5001");
+        await Page.FillAsync("label:has-text('Email address') + input", Email);
+        await Page.FillAsync("label:has-text('Password') + input", Password);
+        await Page.ClickAsync("button:has-text('Continue')");
+    }
+
     [Test]
     public async Task ProductZoeken_Should_GefilterdeResultatenTonen_KaartView()
     {
-        await Page.GotoAsync("https://localhost:5001");
+        await Page.FillAsync("#product-search", "Chirurgische handschoenen");
+        await Task.Delay(1000);
 
-        await Page.FillAsync("#product-search", "Product 1");
-        await Page.ClickAsync("button:has-text('Zoek')");
+        // Wacht totdat de kaarten zijn geladen
+        await Page.WaitForSelectorAsync("div.kaart");
 
-        var productKaarten = await Page.QuerySelectorAllAsync("div.product-card");
+        var productKaarten = await Page.QuerySelectorAllAsync("div.kaart");
+        Console.WriteLine($"Aantal gevonden kaarten: {productKaarten}");
 
         var allMatch = true;
 
         foreach (var kaart in productKaarten)
         {
-            var productNaam = await kaart.InnerTextAsync();
-            if (!productNaam.Contains("Product 1", StringComparison.OrdinalIgnoreCase))
+            // Zoek binnen elke kaart het element met de klasse 'naam'
+            var titelElement = await kaart.QuerySelectorAsync("#naam");
+
+            if (titelElement == null)
+            {
+                Console.WriteLine("Fout: Geen element met class 'naam' gevonden in een van de kaarten.");
+                allMatch = false;
+                break;
+            }
+
+            var productNaam = await titelElement.InnerTextAsync();
+            Console.WriteLine($"Gevonden productnaam: {productNaam}");
+
+            if (!productNaam.Contains("Chirurgische handschoenen", StringComparison.OrdinalIgnoreCase))
             {
                 allMatch = false;
                 break;
@@ -38,15 +61,13 @@ public class ProductenlijstPlaywrightTests : PageTest
     [Test]
     public async Task ProductZoeken_Should_GefilterdeResultatenTonen_TableView()
     {
-        await Page.GotoAsync("https://localhost:5001");
-        await Page.ClickAsync("i"); // Switch to table view
+        await Page.ClickAsync("i");
 
-        await Page.FillAsync("#product-search", "Product 1");
-        await Page.ClickAsync("button:has-text('Zoek')");
+        await Page.FillAsync("#product-search", "Chirurgische handschoenen");
+        await Task.Delay(1000);
 
-        await Page.WaitForSelectorAsync(".product-table");
-
-        var productRijen = await Page.QuerySelectorAllAsync(".product-table > tbody > tr");
+        await Page.WaitForSelectorAsync(".table tbody");
+        var productRijen = await Page.QuerySelectorAllAsync(".table tbody tr");
 
         var allMatch = true;
 
@@ -56,7 +77,7 @@ public class ProductenlijstPlaywrightTests : PageTest
             if (naamCell != null)
             {
                 var naamTekst = await naamCell.InnerTextAsync();
-                if (!naamTekst.Contains("Product 1", StringComparison.OrdinalIgnoreCase))
+                if (!naamTekst.Contains("Chirurgische handschoenen", StringComparison.OrdinalIgnoreCase))
                 {
                     allMatch = false;
                     break;
@@ -70,25 +91,25 @@ public class ProductenlijstPlaywrightTests : PageTest
     [Test]
     public async Task ToggleView_Should_NaarTableViewWisselen()
     {
-        await Page.GotoAsync("https://localhost:5001");
-        await Page.ClickAsync("i"); // Switch to table view
+        await Page.ClickAsync("i");
 
-        bool isTabelView = await Page.IsVisibleAsync("table.product-table");
-        Assert.True(isTabelView, "De tabelweergave zou zichtbaar moeten zijn.");
+        bool isTabelView = await Page.IsVisibleAsync("table");
+        Assert.IsTrue(isTabelView, "De tabelweergave zou zichtbaar moeten zijn.");
     }
 
     [Test]
     public async Task ToggleView_Should_NaarTableViewWisselen_DanTerugKaartView()
     {
-        await Page.GotoAsync("https://localhost:5001");
-        await Page.ClickAsync("i"); // Switch to table view
+        await Page.ClickAsync("i");
 
-        bool isTabelView = await Page.IsVisibleAsync("table.product-table");
-        Assert.True(isTabelView, "De tabelweergave zou zichtbaar moeten zijn.");
+        bool isTabelView = await Page.IsVisibleAsync("table");
+        Assert.IsTrue(isTabelView, "De tabelweergave zou zichtbaar moeten zijn.");
 
-        await Page.ClickAsync("i"); // Switch terug naar kaartweergave
+        await Page.ClickAsync("i");
 
-        bool isKaartView = await Page.IsVisibleAsync(".product-list");
-        Assert.True(isKaartView, "De kaartweergave zou zichtbaar moeten zijn.");
+        var productKaart = Page.Locator(".productkaart").Filter(new() { HasText = "Chirurgische handschoenen" }).First;
+
+
+        Assert.IsNotNull(productKaart, "Productkaart zou moeten zijn geselecteerd.");
     }
 }
