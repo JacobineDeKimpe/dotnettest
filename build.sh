@@ -51,8 +51,7 @@ COPY . .
 
 # Restore the NuGet packages
 RUN dotnet restore
-RUN dotnet publish -c Release -o out
-
+RUN dotnet publish  Rise.Server/Rise.Server.csproj -c Release -o out
 
 # Use the official .NET 8 runtime image to create a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
