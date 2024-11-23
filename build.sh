@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+#clean up docker
+sudo docker system prune -f
+
 mkdir -p tempdir
 mkdir -p tempdir/Rise.Client
 mkdir -p tempdir/Rise.Client.Tests
@@ -13,49 +16,70 @@ mkdir -p tempdir/Rise.Server.Tests
 mkdir -p tempdir/Rise.Services
 mkdir -p tempdir/Rise.Shared
 
-#COPY the content of the folder
-echo "COPYing Ris.Client files"
-cp -r Rise.Client/* tempdir/Rise.Client
-echo "COPYing Ris.Client.Tests files"
-cp -r Rise.Client.Tests/* tempdir/Rise.Client.Tests
-echo "COPYing Ris.Domain files"
-cp -r Rise.Domain/* tempdir/Rise.Domain
-echo "COPYing Ris.Domain.Tests files"
-cp -r Rise.Domain.Tests/* tempdir/Rise.Domain.Tests
-echo "COPYing Ris.Persistence files"
-cp -r Rise.Persistence/* tempdir/Rise.Persistence
-echo "COPYing Ris.PlaywrightTests files"
-cp -r Rise.PlaywrightTests/* tempdir/Rise.PlaywrightTests
-echo "COPYing Ris.Server files"
-cp -r Rise.Server/* tempdir/Rise.Server
-echo "COPYing Ris.Server.Tests files"
-#cp -r Rise.Server.Tests/* tempdir/Rise.Server.Tests
-echo "COPYing Ris.Services files"
-cp -r Rise.Services/* tempdir/Rise.Services
-echo "COPYing Ris.Shared files"
-cp -r Rise.Shared/* tempdir/Rise.Shared
+#copy the content of the folder
+declare -a folders=("Rise.Client" "Rise.Client.Tests" "Rise.Domain" "Rise.Domain.Tests" "Rise.Persistence" "Rise.PlaywrightTests" "Rise.Server" "Rise.Server.Tests" "Rise.Services" "Rise.Shared")
 
-#COPY the sln file to tempdir
+for folder in "${folders[@]}"; do
+  echo "Copying $folder files"
+  cp -r "$folder"/* "tempdir/$folder"
+done
+
+#copy the sln file to tempdir
 cp Rise.sln tempdir
 
 cat > tempdir/Dockerfile << _EOF_
-FROM debian:bookworm-slim
-COPY ./Rise.client /home/app/Rise.Client/
-COPY ./Rise.Client.Tests /home/app/Rise.Client.Tests/
-COPY ./Rise.Domain /home/app/Rise.Domain/
-COPY ./Rise.Domain.Tests /home/app/Rise.Domain.Tests/
-COPY ./Rise.Persistence /home/app/Rise.Persistence/
-COPY ./Rise.PlaywrightTests /home/app/Rise.PlaywrightTests/
-COPY ./Rise.Server /home/app/Rise.Server/
-COPY ./Rise.Server.Tests /home/app/Rise.Server.Tests/
-COPY ./Rise.Services /home/app/Rise.Services/
-COPY ./Rise.Shared /home/app/Rise.Shared/
-COPY ./Rise.sln /home/app/Rise.sln
+# Use the official .NET 8 SDK image to build the application
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Set the working directory for the build process
+WORKDIR /src
+
+# Copy the .sln file and the project files into the container
+COPY ["Rise.sln", "./"]
+COPY ["Rise.Server/Rise.Server.csproj", "Rise.Server/"]
+COPY ["Rise.Client/Rise.Client.csproj", "Rise.Client/"]
+COPY ["Rise.Domain/Rise.Domain.csproj", "Rise.Domain/"]
+COPY ["Rise.Persistence/Rise.Persistence.csproj", "Rise.Persistence/"]
+COPY ["Rise.Services/Rise.Services.csproj", "Rise.Services/"]
+COPY ["Rise.Shared/Rise.Shared.csproj", "Rise.Shared/"]
+COPY ["Rise.Client.Tests/Rise.Client.Tests.csproj", "Rise.Client.Tests/"]
+COPY ["Rise.Server.Tests/Rise.Server.Tests.csproj", "Rise.Server.Tests/"]
+COPY ["Rise.Domain.Tests/Rise.Domain.Tests.csproj", "Rise.Domain.Tests/"]
+
+# Copy the rest of the application files
+COPY . .
+
+# Restore the NuGet packages
+RUN dotnet restore
+RUN dotnet publish -c Release -o out
+
+# Use the official .NET 8 runtime image to create a runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+# Set the working directory for the application
+WORKDIR /app
+
+# Copy the build output from the build image
+COPY --from=build /src/out .
+
+# Expose the port 5000 and 5001
+EXPOSE 5000
 EXPOSE 5001
-CMD dotnet build /home/app/
+
+#set the port for the application
+ENV ASPNETCORE_URLS=http://+:5000
+
+# Set the entry point to run the app in development mode
+ENTRYPOINT ["dotnet", "Rise.Server.dll"]
 _EOF_
 
 cd tempdir || exit
-docker build -t rise-dotnet .
-docker run -t -p 5001:5001 --name dotnet-running rise-dotnet
-docker ps -a
+# Build the Docker image, specifying the current directory as the build context
+sudo docker build -t dotnet .
+sudo docker run -t -d -p 5000:5000 -p 5001:5001 --name dotnetapp dotnet
+
+#remove tempdir
+sudo rm -rf tempdir
+
+# List the running Docker containers
+sudo docker ps -a
