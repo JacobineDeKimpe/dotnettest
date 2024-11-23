@@ -51,7 +51,7 @@ COPY . .
 
 # Restore the NuGet packages
 RUN dotnet restore
-RUN dotnet publish -c Release -o out > build_log.txt 2>&1
+RUN dotnet publish -c Release -o out
 
 
 # Use the official .NET 8 runtime image to create a runtime image
