@@ -53,8 +53,7 @@ COPY . .
 RUN dotnet restore
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
-RUN dotnet-ef database update --startup-project Rise.Server --project Rise.Persistence
-RUN dotnet publish  /src/Rise.Server/Rise.Server.csproj -c Release -o out
+RUN dotnet build
 
 # Use the official .NET 8 runtime image to create a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
