@@ -53,7 +53,6 @@ COPY . .
 RUN dotnet restore
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
-export PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet-ef database update --startup-project Rise.Server --project Rise.Persistence
 RUN dotnet publish  /src/Rise.Server/Rise.Server.csproj -c Release -o out
 
