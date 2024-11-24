@@ -51,6 +51,7 @@ COPY . .
 
 # Restore the NuGet packages
 RUN dotnet restore
+RUN dotnet ef database update --startup-project Rise.Server --project Rise.Persistence
 RUN dotnet publish  /src/Rise.Server/Rise.Server.csproj -c Release -o out
 
 # Use the official .NET 8 runtime image to create a runtime image
