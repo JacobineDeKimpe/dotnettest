@@ -11,7 +11,7 @@ pipeline {
             steps {
                 echo "Building the application"
                 script {
-                    // Replace this with the actual build command for your project
+                    sh 'chmod +x ./build.sh'
                     sh './build.sh'
                 }
             }
