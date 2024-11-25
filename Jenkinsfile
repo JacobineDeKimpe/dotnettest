@@ -1,28 +1,30 @@
-pipeline{
-agent any
-stages {
+pipeline {
+    agent any
+    stages {
         stage('Checkout') {
             steps {
-               git branch: 'main', credentialsId: 'RISE', url: 'git@github.com:JacobineDeKimpe/dotnettest.git'
+                git branch: 'main', credentialsId: 'RISE', url: 'git@github.com:JacobineDeKimpe/dotnettest.git'
             }
         }
 
-stage("build") {
-            
+        stage('Build') {
             steps {
-                echo "build the app"
+                echo "Building the application"
                 script {
-                    build 'dotnetapp'
+                    // Replace this with the actual build command for your project
+                    sh './build.sh'
                 }
             }
         }
-stage("publish") {
-            
+
+        stage('Publish') {
             steps {
-                echo "publish the app"
-                script { 
+                echo "Publishing the application"
+                script {
+                    // Add publishing steps here
+                    sh './publish.sh'
                 }
             }
-        }        
-   }      
-} 
+        }
+    }
+}
