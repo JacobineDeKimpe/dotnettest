@@ -65,33 +65,6 @@ public class ProductController : ControllerBase
         return Ok(new { products, totalCount });
     }
 
-    [HttpPut("{productId}/increase")]
-    // [Authorize(Roles = "VoorraadBeheerder")]
-    public async Task<IActionResult> IncreaseQuantity(int productId, [FromBody] int quantityToAdd)
-    {
-        Console.WriteLine($"Aantal in stock voor product met id {productId} verhogen met {quantityToAdd}...");
-
-        try
-        {
-            await productService.IncreaseQuantityAsync(productId, quantityToAdd);
-            Console.WriteLine($"Aantal in stock geupdate");
-            return Ok(new { Message = "Aantal in stock geupdate." });
-        }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine($"Meegegeven aantal is niet geldig");
-            return BadRequest(new { Message = ex.Message });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            Console.WriteLine($"Product met id {productId} niet gevonden");
-            return NotFound(new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { Message = "Error tijdens toevoegen aan aantal in stock", Details = ex.Message });
-        }
-    }
     [HttpPost]
     // [Authorize(Roles = "VoorraadBeheerder")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto createDto)

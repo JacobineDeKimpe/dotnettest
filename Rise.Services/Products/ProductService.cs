@@ -4,7 +4,6 @@ using Rise.Shared.Products;
 using Rise.Domain.Products;
 using FluentValidation;
 
-
 namespace Rise.Services.Products;
 
 public class ProductService : IProductService
@@ -163,26 +162,7 @@ public class ProductService : IProductService
         var products = await query.ToListAsync();
 
         return products;
-    public async Task IncreaseQuantityAsync(int productId, int quantityToAdd)
-    {
-        if (quantityToAdd <= 0)
-        {
-            throw new ArgumentException("Aantal moet groter zijn dan 0.", nameof(quantityToAdd));
-        }
-
-        Product? product = await dbContext.Products.SingleOrDefaultAsync(x => x.Id == productId);
-
-        if (product is null)
-        {
-            throw new KeyNotFoundException($"Product met Id {productId} werd niet gevonden.");
-        }
-
-        product.Quantity += quantityToAdd;
-
-        await dbContext.SaveChangesAsync();
-
     }
-}
 
     public async Task<bool> CreateProductAsync(CreateProductDto createDto)
     {

@@ -23,8 +23,4 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Rise.Persistence\Rise.Persistence.csproj" />
-  </ItemGroup>
-
 </Project>
