@@ -28,50 +28,71 @@ done
 cp Rise.sln tempdir
 
 cat > tempdir/Dockerfile << _EOF_
+#Use aspnet voor .net runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+
+EXPOSE 5000
+
 # Use the official .NET 8 SDK image to build the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # Set the working directory for the build process
-WORKDIR /src
+WORKDIR /app
 
 # Copy the .sln file and the project files into the container
 COPY ["Rise.sln", "./"]
-COPY ["Rise.Server/Rise.Server.csproj", "Rise.Server/"]
 COPY ["Rise.Client/Rise.Client.csproj", "Rise.Client/"]
+COPY ["Rise.Client.Tests/Rise.Client.Tests.csproj", "Rise.Client.Tests/"]
 COPY ["Rise.Domain/Rise.Domain.csproj", "Rise.Domain/"]
+COPY ["Rise.Domain.Tests/Rise.Domain.Tests.csproj", "Rise.Domain.Tests/"]
 COPY ["Rise.Persistence/Rise.Persistence.csproj", "Rise.Persistence/"]
+COPY ["Rise.PlaywrightTests/Rise.PlaywrightTests.csproj", "Rise.PlaywrightTests/"]
+COPY ["Rise.Server/Rise.Server.csproj", "Rise.Server/"]
+COPY ["Rise.Server.Tests/Rise.Server.Tests.csproj", "Rise.Server.Tests/"]
 COPY ["Rise.Services/Rise.Services.csproj", "Rise.Services/"]
 COPY ["Rise.Shared/Rise.Shared.csproj", "Rise.Shared/"]
-COPY ["Rise.Client.Tests/Rise.Client.Tests.csproj", "Rise.Client.Tests/"]
-COPY ["Rise.Server.Tests/Rise.Server.Tests.csproj", "Rise.Server.Tests/"]
-COPY ["Rise.Domain.Tests/Rise.Domain.Tests.csproj", "Rise.Domain.Tests/"]
 
-# Copy the rest of the application files
+# Restore as distinct layers
+RUN dotnet restore "Rise.Server/Rise.Server.csproj"
+RUN dotnet restore "Rise.Persistence/Rise.Persistence.csproj"
+
+# copy remaining files
 COPY . .
 
-# Restore the NuGet packages
-RUN dotnet restore
+# Change repository
+WORKDIR "/app/Rise.Server"
+
+# Build the application
+RUN dotnet build "Rise.Server.csproj" -c Release -o /app/build
+
+WORKDIR "/app"
+
+# install dotnet tools in build image
 RUN dotnet tool install --global dotnet-ef
-ENV PATH="$PATH:/root/.dotnet/tools"
-RUN dotnet build
 
-# Use the official .NET 8 runtime image to create a runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+#var
+ENV PATH="${PATH}:/root/.dotnet/tools"
 
-# Set the working directory for the application
+RUN dotnet-ef database update --startup-project Rise.Server --project Rise.Persistence
+
+WORKDIR "/app/Rise.Server"
+
+# publish the application
+RUN dotnet publish "Rise.Server.csproj" -c Release -o /app/publish
+
+FROM base AS FINAL
 WORKDIR /app
 
-# Copy the build output from the build image
-COPY --from=build /src/out .
+#copy the published files
+COPY --from=build /app/publish .
 
-# Expose the port 5000 and 5001
-EXPOSE 5000
-EXPOSE 5001
-
-#set the port for the application
+# .net tool path
+ENV PATH="${PATH}:/root/.dotnet/tools"
 ENV ASPNETCORE_URLS=http://+:5000
 
-# Set the entry point to run the app in development mode
+
+#start the application
 ENTRYPOINT ["dotnet", "Rise.Server.dll"]
 _EOF_
 
@@ -84,4 +105,4 @@ docker run -t -d -p 5000:5000 -p 5001:5001 --name dotnetapp dotnet
 rm -rf tempdir
 
 # List the running Docker containers
-docker ps -a
+docker ps -a | grep dotnetapp
